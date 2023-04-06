@@ -88,6 +88,8 @@ public class ControleurMediateur implements CollecteurEvenements {
             }
             if (IAActive) {
                 joueurAutomatique.activeIA();
+            } else {
+                jeu.prochainNiveau();
             }
             if (jeu.jeuTermine()) {
                 System.exit(0);
