@@ -26,6 +26,7 @@ package Modele;
  *          38401 Saint Martin d'Hères
  */
 
+import Controleur.CoupCaisse;
 import Global.Configuration;
 import Structures.Iterateur;
 
@@ -38,7 +39,8 @@ public class Niveau implements Cloneable {
     int l, c;
     int[][] cases;
     String nom;
-    int pousseurL, pousseurC;
+    public int pousseurL;
+    public int pousseurC;
     int nbButs;
     int nbCaissesSurBut;
 
@@ -152,6 +154,30 @@ public class Niveau implements Cloneable {
         if (!aMur(destL, destC)) {
             resultat.deplace(pousseurL, pousseurC, destL, destC);
             return resultat;
+        }
+        return null;
+    }
+
+    public CoupCaisse prepareCoup(int dLig, int dCol) {
+        int destL = pousseurL + dLig;
+        int destC = pousseurC + dCol;
+        Coup resultat = new Coup();
+        boolean deplacementCaisse = false;
+
+        if (aCaisse(destL, destC)) {
+            int dCaisL = destL + dLig;
+            int dCaisC = destC + dCol;
+
+            if (estOccupable(dCaisL, dCaisC)) {
+                resultat.deplacementCaisse(destL, destC, dCaisL, dCaisC);
+                deplacementCaisse = true;
+            } else {
+                return null;
+            }
+        }
+        if (!aMur(destL, destC)) {
+            resultat.deplacementPousseur(pousseurL, pousseurC, destL, destC);
+            return new CoupCaisse(resultat, deplacementCaisse);
         }
         return null;
     }

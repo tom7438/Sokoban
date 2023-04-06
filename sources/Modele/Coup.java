@@ -30,12 +30,41 @@ import Global.Configuration;
 import Structures.Sequence;
 
 public class Coup {
+
+	Mouvement pousseur, caisse;
+
+	int dirPousseurL, dirPousseurC;
+
 	Sequence<Mouvement> mouvements;
 	Sequence<Marque> marques;
 
 	public Coup() {
 		mouvements = Configuration.instance().nouvelleSequence();
 		marques = Configuration.instance().nouvelleSequence();
+	}
+
+	public void deplacementCaisse(int dL, int dC, int vL, int vC) {
+		caisse = creeDeplacement("caisse", caisse, dL, dC, vL, vC);
+	}
+
+	public void deplacementPousseur(int dL, int dC, int vL, int vC) {
+		pousseur = creeDeplacement("pousseur", pousseur, dL, dC, vL, vC);
+		dirPousseurL = vL - dL;
+		dirPousseurC = vC - dC;
+		if (dirPousseurC*dirPousseurC > dirPousseurL*dirPousseurL) {
+			dirPousseurL = 0;
+			dirPousseurC = dirPousseurC < 0 ? -1 : 1;
+		} else {
+			dirPousseurL = dirPousseurL < 0 ? -1 : 1;
+			dirPousseurC = 0;
+		}
+	}
+
+	private Mouvement creeDeplacement(String nom, Mouvement existant, int dL, int dC, int vL, int vC) {
+		if (existant != null) {
+			//Configuration.alerte("Deplacement " + nom + " déjà présent : " + existant);
+		}
+		return new Mouvement(dL, dC, vL, vC);
 	}
 
 	public void deplace(int dL, int dC, int vL, int vC) {
